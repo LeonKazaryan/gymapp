@@ -9,14 +9,22 @@ struct PlannedExercise: Hashable, Sendable {
     var targetReps: Int
     /// First time with this exercise: find the working weight set by set.
     var calibrate: Bool
-    /// The programmed exercise this one replaces, because it hurt last time.
+    /// The programmed exercise this one replaces, and why.
     var replaces: ExerciseID?
+    var swapReason: SwapReason?
     /// Both this exercise and its swap have hurt before: time to see a doctor.
     var hurtBefore = false
     /// What to do instead when the machine is taken. Empty or one.
     var swaps: [PlannedExercise] = []
 
     var exercise: Exercise { .with(prescription.exercise) }
+
+    enum SwapReason: Sendable {
+        /// The gym doesn't have the machine.
+        case missing
+        /// It hurt last time.
+        case pain
+    }
 }
 
 struct PlannedWorkout: Identifiable, Sendable {
@@ -43,8 +51,8 @@ enum Coach {
         Int((Double(4 * daysPerWeek) * 0.75).rounded(.up))
     }
 
-    /// The next workout on `date`.
-    static func plan(_ log: TrainingLog, daysPerWeek: Int, on date: Date, calendar: Calendar = .current) -> PlannedWorkout {
+    /// The next workout on `date`. Exercises in `unavailable` (the gym lacks the kit) are swapped.
+    static func plan(_ log: TrainingLog, daysPerWeek: Int, unavailable: Set<ExerciseID> = [], on date: Date, calendar: Calendar = .current) -> PlannedWorkout {
         let comeback = log.lastWorkout.flatMap { Comeback.after(days: days(from: $0, to: date, calendar)) }
         var phase = log.phase
         var phaseStart = log.phaseStart ?? date
@@ -62,7 +70,7 @@ enum Coach {
         let template = workouts[done % workouts.count]
         let firstWeek = phase == 0 && week == 1 && log.history.count < daysPerWeek
         let exercises = template.items.map { item in
-            planned(firstWeek ? item.withSets(min(item.sets, 2)) : item, log: log, comeback: comeback)
+            planned(firstWeek ? item.withSets(min(item.sets, 2)) : item, log: log, comeback: comeback, unavailable: unavailable)
         }
         return PlannedWorkout(
             phase: phase, phaseStart: phaseStart, workoutsInPhase: done, week: week,
@@ -70,18 +78,36 @@ enum Coach {
         )
     }
 
-    private static func planned(_ item: Prescription, log: TrainingLog, comeback: Comeback?) -> PlannedExercise {
-        // After "It hurts", the swap comes up instead, unless it has hurt too.
-        let candidates = [item.exercise] + [Exercise.with(item.exercise).alternative].compactMap { $0 }
-        let painFree = candidates.first { (log.progress[$0]?.painCount ?? 0) == 0 }
-        let chosen = painFree ?? item.exercise
+    private static func planned(_ item: Prescription, log: TrainingLog, comeback: Comeback?, unavailable: Set<ExerciseID>) -> PlannedExercise {
+        // The programmed exercise, then its swaps, minus what the gym doesn't have.
+        let chain = swapChain(item.exercise)
+        let available = chain.filter { !unavailable.contains($0) }
+        let pool = available.isEmpty ? [item.exercise] : available
+        // After "It hurts", the next one comes up instead, unless it has hurt too.
+        let hurts = { (id: ExerciseID) in (log.progress[id]?.painCount ?? 0) > 0 }
+        let painFree = pool.first { !hurts($0) }
+        let chosen = painFree ?? pool[0]
         var plan = start(item.swapped(to: chosen), log: log, comeback: comeback)
-        plan.replaces = chosen == item.exercise ? nil : item.exercise
+        if chosen != item.exercise {
+            plan.replaces = item.exercise
+            plan.swapReason = unavailable.contains(item.exercise) ? .missing : .pain
+        }
         plan.hurtBefore = painFree == nil
-        if let swap = Exercise.with(chosen).alternative, swap != item.exercise || chosen == item.exercise {
+        if let swap = pool.first(where: { $0 != chosen && !hurts($0) }) {
             plan.swaps = [start(item.swapped(to: swap), log: log, comeback: comeback)]
         }
         return plan
+    }
+
+    /// An exercise and the swaps after it, without repeats.
+    static func swapChain(_ id: ExerciseID) -> [ExerciseID] {
+        var chain = [id]
+        var next = Exercise.with(id).alternative
+        while let candidate = next, !chain.contains(candidate) {
+            chain.append(candidate)
+            next = Exercise.with(candidate).alternative
+        }
+        return chain
     }
 
     private static func start(_ item: Prescription, log: TrainingLog, comeback: Comeback?) -> PlannedExercise {

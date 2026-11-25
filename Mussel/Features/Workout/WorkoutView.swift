@@ -128,7 +128,7 @@ struct WorkoutView: View {
         }
         .confirmationDialog("Does it hurt?", isPresented: $confirmPain, titleVisibility: .visible) {
             Button("Skip this exercise", role: .destructive) {
-                let repeated = run.current.hurtBefore || run.current.replaces != nil
+                let repeated = run.current.hurtBefore || run.current.swapReason == .pain
                 run.reportPain(at: .now)
                 if repeated { showDoctor = true }
             }
@@ -190,8 +190,10 @@ struct WorkoutView: View {
             Text("\(current.prescription.summary) · \(current.exercise.muscleLine)")
                 .font(Typography.caption)
                 .foregroundStyle(Palette.secondary)
-            if let replaced = current.replaces {
-                Note(icon: "arrow.triangle.swap", text: String(localized: "Instead of \(Exercise.with(replaced).name): it hurt last time."))
+            if let replaced = current.replaces.map({ Exercise.with($0).name }) {
+                Note(icon: "arrow.triangle.swap", text: current.swapReason == .missing
+                    ? String(localized: "Instead of \(replaced): your gym doesn't have it.")
+                    : String(localized: "Instead of \(replaced): it hurt last time."))
             }
             if current.hurtBefore {
                 Note(icon: "cross.case", text: String(localized: "This hurt before. If it hurts again, stop and see a doctor."), warning: true)

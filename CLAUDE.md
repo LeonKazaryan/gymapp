@@ -63,7 +63,7 @@ xcrun simctl launch --terminate-running-process "iPhone 16 Pro" com.leonkazaryan
 xcrun simctl io "iPhone 16 Pro" screenshot shot.png
 ```
 
-- `-MusselDebugScreen onboarding|program|library|exercise|workout`, `-MusselDebugExercise <ExerciseID>`, `-MusselDebugPhase 0|1|2`, `-MusselDebugDays 2|3|4`, `-MusselDebugReset YES` (forget onboarding and the training log).
+- `-MusselDebugScreen onboarding|program|library|exercise|workout|profile`, `-MusselDebugOnboardingStep 0…6`, `-MusselDebugExercise <ExerciseID>`, `-MusselDebugPhase 0|1|2`, `-MusselDebugDays 2|3|4`, `-MusselDebugReset YES` (forget onboarding and the training log).
 - `-MusselDebugWorkoutStage repsLeft|rest|feeling|summary` with `-MusselDebugScreen workout`: the workout plays itself up to that point. `summary` saves a real workout to the log.
 
 ## Environment

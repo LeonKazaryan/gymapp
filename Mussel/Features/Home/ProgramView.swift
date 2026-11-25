@@ -7,15 +7,16 @@ struct ProgramView: View {
     @Environment(TrainingStore.self) private var store
     @State private var phase = 0
     @State private var workout: PlannedWorkout?
+    @State private var showProfile = false
 
     var body: some View {
         @Bindable var settings = settings
         let program = Program.forDays(settings.daysPerWeek)
-        let next = store.nextWorkout(daysPerWeek: settings.daysPerWeek)
+        let next = store.nextWorkout(for: settings)
         ScrollView {
             VStack(alignment: .leading, spacing: 26) {
                 NextWorkoutCard(plan: next, lastWorkout: store.log.lastWorkout) {
-                    workout = store.nextWorkout(daysPerWeek: settings.daysPerWeek)
+                    workout = store.nextWorkout(for: settings)
                 }
                 VStack(alignment: .leading, spacing: 12) {
                     DaysPicker(days: $settings.daysPerWeek)
@@ -43,6 +44,19 @@ struct ProgramView: View {
         .fullScreenCover(item: $workout) { plan in
             WorkoutView(plan: plan)
         }
+        .sheet(isPresented: $showProfile) {
+            ProfileView()
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showProfile = true
+                } label: {
+                    Image(systemName: "person.crop.circle")
+                }
+                .accessibilityLabel(Text("Profile"))
+            }
+        }
         .onChange(of: next.phase, initial: true) { _, current in
             phase = current
             #if DEBUG
@@ -52,6 +66,7 @@ struct ProgramView: View {
         #if DEBUG
         .task {
             if Debug.screen == "workout" { workout = next }
+            if Debug.screen == "profile" { showProfile = true }
         }
         #endif
     }

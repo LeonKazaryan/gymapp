@@ -232,3 +232,32 @@ struct WorkoutRunTests {
         #expect(run.stage == .finished)
     }
 }
+
+/// Kit the gym doesn't have.
+struct GymKitTests {
+    let day0 = Date(timeIntervalSince1970: 1_800_000_000)
+
+    @Test func missingMachinesUseTheirSwaps() throws {
+        let unavailable = GymKit.unavailable([.chestPress, .legPress])
+        let plan = Coach.plan(TrainingLog(), daysPerWeek: 3, unavailable: unavailable, on: day0)
+        let ids = plan.exercises.map(\.prescription.exercise)
+        #expect(!ids.contains(.chestPress) && !ids.contains(.legPress))
+        let push = try #require(plan.exercises.first { $0.replaces == .chestPress })
+        #expect(push.prescription.exercise == .pushUp && push.swapReason == .missing)
+    }
+
+    @Test func whenTheSwapIsMissingTooTheChainGoesOn() {
+        // Lat pulldown → gravitron → back to the pulldown: nothing left, so the program keeps it.
+        #expect(Coach.swapChain(.latPulldown) == [.latPulldown, .assistedPullUp])
+        let none = Coach.plan(TrainingLog(), daysPerWeek: 3, unavailable: GymKit.unavailable([.latPulldown, .gravitron]), on: day0)
+        #expect(none.exercises.contains { $0.prescription.exercise == .latPulldown })
+        // Squat rack missing: the barbell squat falls back to the goblet squat.
+        #expect(Coach.swapChain(.backSquat).dropFirst().first == .gobletSquat)
+    }
+
+    @Test func theBusySwapNeverOffersMissingKit() throws {
+        let plan = Coach.plan(TrainingLog(), daysPerWeek: 3, unavailable: GymKit.unavailable([.gravitron]), on: day0)
+        let pulldown = try #require(plan.exercises.first { $0.prescription.exercise == .latPulldown })
+        #expect(pulldown.swaps.isEmpty)
+    }
+}

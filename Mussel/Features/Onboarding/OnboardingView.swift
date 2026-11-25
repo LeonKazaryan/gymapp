@@ -1,36 +1,93 @@
 import SwiftUI
 
-/// Two screens: what the app is, then how many days a week.
+/// Welcome, then six short questions, then the program, ready. Every answer is saved as it's
+/// given and can be changed later in the profile.
 struct OnboardingView: View {
-    @Environment(Settings.self) private var settings
-    @State private var step = 0
-    @State private var days = 3
-
-    var body: some View {
-        ZStack {
-            if step == 0 {
-                welcome
-                    .transition(.asymmetric(insertion: .opacity, removal: .move(edge: .leading).combined(with: .opacity)))
-            } else {
-                daysChoice
-                    .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
-            }
-        }
-        .animation(Motion.smooth, value: step)
-        .screenBackground()
+    enum Step: Int, CaseIterable {
+        case welcome, goal, about, health, days, gym, ready
     }
 
-    // MARK: Welcome
+    @Environment(Settings.self) private var settings
+    @Environment(TrainingStore.self) private var store
+    @State private var step = Step.welcome
+    @State private var forward = true
+    @State private var appeared = false
+
+    var body: some View {
+        @Bindable var settings = settings
+        VStack(spacing: 0) {
+            if step != .welcome {
+                topBar
+                    .transition(.opacity)
+            }
+            ZStack {
+                page(settings: $settings)
+                    .id(step)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: forward ? .trailing : .leading).combined(with: .opacity),
+                        removal: .move(edge: forward ? .leading : .trailing).combined(with: .opacity)
+                    ))
+            }
+            .frame(maxHeight: .infinity)
+            Button(buttonTitle) { next() }
+                .buttonStyle(.capsule())
+                .disabled(!canContinue)
+                .opacity(canContinue ? 1 : 0.4)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 12)
+                .sensoryFeedback(Haptics.tap, trigger: step)
+        }
+        .centered(maxWidth: 560)
+        .screenBackground()
+        #if DEBUG
+        .onAppear { if let debug = Debug.onboardingStep.flatMap(Step.init) { step = debug } }
+        #endif
+    }
+
+    // MARK: Pages
+
+    @ViewBuilder
+    private func page(settings: Bindable<Settings>) -> some View {
+        switch step {
+        case .welcome:
+            welcome
+        case .goal:
+            QuestionPage(title: String(localized: "What brings you to the gym?"), subtitle: String(localized: "Pick the one that matters most.")) {
+                GoalPicker(goal: settings.goal)
+            }
+        case .about:
+            QuestionPage(title: String(localized: "A little about you"), subtitle: String(localized: "Your weight is only for tracking your progress. You can skip it.")) {
+                AboutFields(age: settings.age, bodyWeight: settings.bodyWeight)
+            }
+        case .health:
+            QuestionPage(title: String(localized: "Anything from this list?"), subtitle: String(localized: "Tick what applies. If nothing does, just go on.")) {
+                HealthChecklist(flags: settings.health)
+            }
+        case .days:
+            QuestionPage(title: String(localized: "How many days a week can you train?"), subtitle: String(localized: "You can change it any time on the program screen.")) {
+                DaysChoice(days: settings.daysPerWeek)
+            }
+        case .gym:
+            QuestionPage(title: String(localized: "What does your gym have?"), subtitle: String(localized: "Tap what's missing and the program will use swaps. Not sure? Leave everything on; the «Machine taken» button helps on the day.")) {
+                KitGrid(missing: settings.missingKit)
+            }
+        case .ready:
+            ReadyPage(plan: store.nextWorkout(for: self.settings), settings: self.settings)
+        }
+    }
 
     private static let showcase: [ExerciseID] = [.legPress, .latPulldown, .chestPress, .gobletSquat]
 
     private var welcome: some View {
         VStack(alignment: .leading, spacing: 0) {
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
-                ForEach(Self.showcase, id: \.self) { id in
+                ForEach(Array(Self.showcase.enumerated()), id: \.element) { index, id in
                     DemoView(demo: Demos.of(id), framesPerSecond: 30)
                         .aspectRatio(1, contentMode: .fit)
                         .demoStage(cornerRadius: 22)
+                        .scaleEffect(appeared ? 1 : 0.85)
+                        .opacity(appeared ? 1 : 0)
+                        .animation(Motion.smooth.delay(Double(index) * 0.08), value: appeared)
                 }
             }
             .padding(.top, 12)
@@ -46,94 +103,185 @@ struct OnboardingView: View {
                     .foregroundStyle(Palette.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+            .opacity(appeared ? 1 : 0)
+            .offset(y: appeared ? 0 : 12)
+            .animation(Motion.smooth.delay(0.35), value: appeared)
             Spacer(minLength: 24)
-            Button("Get started") { step = 1 }
-                .buttonStyle(.capsule())
-                .sensoryFeedback(Haptics.tap, trigger: step)
         }
         .padding(.horizontal, 20)
-        .padding(.bottom, 12)
-        .centered(maxWidth: 540)
+        .onAppear { appeared = true }
     }
 
-    // MARK: Days
-
-    private var daysChoice: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Button {
-                step = 0
-            } label: {
+    private var topBar: some View {
+        HStack(spacing: 14) {
+            Button(action: back) {
                 Image(systemName: "chevron.left")
                     .font(.body.weight(.semibold))
                     .foregroundStyle(Palette.text)
-                    .frame(width: 44, height: 44)
+                    .frame(width: 40, height: 40)
                     .background(Palette.raised, in: Circle())
             }
             .accessibilityLabel(Text("Previous step"))
-            .padding(.top, 8)
-            VStack(alignment: .leading, spacing: 10) {
-                Text("How many days a week can you train?")
-                    .font(Typography.largeTitle)
-                    .foregroundStyle(Palette.text)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text("You can change it any time on the program screen.")
-                    .font(Typography.body)
-                    .foregroundStyle(Palette.secondary)
+            HStack(spacing: 4) {
+                ForEach(1..<Step.allCases.count, id: \.self) { index in
+                    Capsule()
+                        .fill(index <= step.rawValue ? Palette.accent : Palette.raised)
+                        .frame(height: 5)
+                }
             }
-            .padding(.top, 24)
-            VStack(spacing: 10) {
-                option(2, title: String(localized: "Twice"), detail: String(localized: "When time is short: two full-body workouts."))
-                option(3, title: String(localized: "Three times"), detail: String(localized: "Recommended: workouts A and B take turns."))
-                option(4, title: String(localized: "Four times"), detail: String(localized: "Upper and lower body on separate days."))
-            }
-            .padding(.top, 28)
-            .sensoryFeedback(Haptics.select, trigger: days)
-            Spacer(minLength: 24)
-            Button("Start") {
-                settings.daysPerWeek = days
-                settings.isOnboarded = true
-            }
-            .buttonStyle(.capsule())
+            .animation(Motion.smooth, value: step)
+            .accessibilityElement()
+            .accessibilityLabel(Text("Step \(step.rawValue) of \(Step.allCases.count - 1)"))
         }
         .padding(.horizontal, 20)
-        .padding(.bottom, 12)
-        .centered(maxWidth: 540)
+        .padding(.vertical, 10)
     }
 
-    private func option(_ value: Int, title: String, detail: String) -> some View {
-        let selected = value == days
-        return Button {
-            withAnimation(Motion.snappy) { days = value }
-        } label: {
-            HStack(spacing: 16) {
-                Text("\(value)")
-                    .font(.system(.title, design: .rounded, weight: .heavy))
-                    .foregroundStyle(selected ? Palette.accent : Palette.text)
-                    .frame(width: 36)
-                VStack(alignment: .leading, spacing: 3) {
+    // MARK: Flow
+
+    private var buttonTitle: String {
+        switch step {
+        case .welcome: String(localized: "Get started")
+        case .ready: String(localized: "Let's go")
+        default: String(localized: "Next")
+        }
+    }
+
+    private var canContinue: Bool {
+        step != .goal || settings.goal != nil
+    }
+
+    private func next() {
+        guard let following = Step(rawValue: step.rawValue + 1) else {
+            settings.isOnboarded = true
+            return
+        }
+        forward = true
+        withAnimation(Motion.smooth) { step = following }
+    }
+
+    private func back() {
+        guard let previous = Step(rawValue: step.rawValue - 1) else { return }
+        forward = false
+        withAnimation(Motion.smooth) { step = previous }
+    }
+}
+
+/// A question: a big title, a line under it and the answers, scrolling if they're tall.
+private struct QuestionPage<Content: View>: View {
+    let title: String
+    let subtitle: String
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 10) {
                     Text(title)
-                        .font(Typography.headline)
+                        .font(Typography.largeTitle)
                         .foregroundStyle(Palette.text)
-                    Text(detail)
-                        .font(Typography.caption)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(subtitle)
+                        .font(Typography.body)
                         .foregroundStyle(Palette.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                Spacer(minLength: 0)
-                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
-                    .foregroundStyle(selected ? Palette.accent : Palette.tertiary)
+                content
             }
-            .multilineTextAlignment(.leading)
-            .padding(16)
-            .background(selected ? Palette.accent.opacity(0.12) : Palette.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .strokeBorder(selected ? Palette.accent : Palette.hairline, lineWidth: selected ? 1.5 : 1)
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+            .padding(.bottom, 24)
+        }
+        .scrollIndicators(.hidden)
+        .scrollBounceBehavior(.basedOnSize)
+    }
+}
+
+/// The end of onboarding: the plan in a few lines and the first workout.
+private struct ReadyPage: View {
+    let plan: PlannedWorkout
+    let settings: Settings
+
+    @State private var appeared = false
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 40, weight: .semibold))
+                        .foregroundStyle(Palette.accentGradient)
+                        .symbolEffect(.bounce, value: appeared)
+                    Text("Your program is ready")
+                        .font(Typography.largeTitle)
+                        .foregroundStyle(Palette.text)
+                    if let goal = settings.goal {
+                        Text(goal.title)
+                            .font(Typography.body)
+                            .foregroundStyle(Palette.secondary)
+                    }
+                }
+                VStack(alignment: .leading, spacing: 12) {
+                    point("calendar", String(localized: "12 weeks: machines, then dumbbells, then the barbell."))
+                    point("scalemass", String(localized: "On the first workout we'll find your weights together."))
+                    point("hand.thumbsup", String(localized: "After each exercise: easy, normal or hard. The app takes it from there."))
+                }
+                firstWorkout
+                if !settings.health.isEmpty || settings.isMinor {
+                    Note(icon: "stethoscope", text: String(localized: "Remember: see a doctor and start with a coach before training on your own."), warning: true)
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
+            .padding(.bottom, 24)
+        }
+        .scrollIndicators(.hidden)
+        .onAppear { appeared = true }
+    }
+
+    private var firstWorkout: some View {
+        let swapped = plan.exercises.filter { $0.swapReason == .missing }.count
+        return VStack(alignment: .leading, spacing: 14) {
+            Eyebrow(String(localized: "Your first workout"))
+            Text(plan.kind.title)
+                .font(Typography.title)
+                .foregroundStyle(Palette.text)
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+                ForEach(Array(plan.exercises.enumerated()), id: \.offset) { index, item in
+                    VStack(spacing: 6) {
+                        DemoView(demo: item.exercise.demo, framesPerSecond: 30)
+                            .aspectRatio(1, contentMode: .fit)
+                            .demoStage(cornerRadius: 14)
+                        Text(item.exercise.name)
+                            .font(Typography.caption)
+                            .foregroundStyle(Palette.secondary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2, reservesSpace: true)
+                    }
+                    .scaleEffect(appeared ? 1 : 0.9)
+                    .opacity(appeared ? 1 : 0)
+                    .animation(Motion.smooth.delay(0.15 + Double(index) * Motion.stagger), value: appeared)
+                }
+            }
+            if swapped > 0 {
+                Note(icon: "arrow.triangle.swap", text: String(localized: "\(swapped) exercises swapped for what your gym has."))
             }
         }
-        .buttonStyle(.pressable)
-        .accessibilityAddTraits(selected ? .isSelected : [])
+        .padding(16)
+        .card(cornerRadius: 26)
+    }
+
+    private func point(_ icon: String, _ text: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: icon)
+                .font(.body.weight(.semibold))
+                .foregroundStyle(Palette.accent)
+                .frame(width: 26)
+            Text(text)
+                .font(Typography.body)
+                .foregroundStyle(Palette.text)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 }
 
