@@ -73,7 +73,7 @@ enum Equipment: Sendable {
     }
 }
 
-enum ExerciseID: String, CaseIterable, Sendable {
+enum ExerciseID: String, CaseIterable, Codable, CodingKeyRepresentable, Sendable {
     case legPress, legExtension, legCurl, gluteBridge, backExtension
     case chestPress, latPulldown, assistedPullUp, seatedCableRow, machineShoulderPress
     case tricepsPushdown, cableCurl, plank, deadBug

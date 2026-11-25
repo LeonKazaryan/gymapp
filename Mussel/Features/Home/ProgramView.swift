@@ -4,13 +4,19 @@ import SwiftUI
 /// It's what the coaches review, so everything in it is visible at once.
 struct ProgramView: View {
     @Environment(Settings.self) private var settings
+    @Environment(TrainingStore.self) private var store
     @State private var phase = 0
+    @State private var workout: PlannedWorkout?
 
     var body: some View {
         @Bindable var settings = settings
         let program = Program.forDays(settings.daysPerWeek)
+        let next = store.nextWorkout(daysPerWeek: settings.daysPerWeek)
         ScrollView {
             VStack(alignment: .leading, spacing: 26) {
+                NextWorkoutCard(plan: next, lastWorkout: store.log.lastWorkout) {
+                    workout = store.nextWorkout(daysPerWeek: settings.daysPerWeek)
+                }
                 VStack(alignment: .leading, spacing: 12) {
                     DaysPicker(days: $settings.daysPerWeek)
                     Text(program.weekPlan)
@@ -34,8 +40,19 @@ struct ProgramView: View {
         }
         .screenBackground()
         .navigationTitle("Program")
+        .fullScreenCover(item: $workout) { plan in
+            WorkoutView(plan: plan)
+        }
+        .onChange(of: next.phase, initial: true) { _, current in
+            phase = current
+            #if DEBUG
+            if let debug = Debug.phase { phase = debug }
+            #endif
+        }
         #if DEBUG
-        .onAppear { if let debug = Debug.phase { phase = debug } }
+        .task {
+            if Debug.screen == "workout" { workout = next }
+        }
         #endif
     }
 

@@ -1,12 +1,12 @@
 import Foundation
 
-enum RepUnit: Sendable {
+enum RepUnit: String, Codable, Sendable {
     case reps
     case seconds
 }
 
 /// One line of a workout: "Leg Press, 3 × 10–12".
-struct Prescription: Hashable, Sendable {
+struct Prescription: Hashable, Codable, Sendable {
     let exercise: ExerciseID
     let sets: Int
     let target: ClosedRange<Int>
@@ -26,7 +26,7 @@ struct Prescription: Hashable, Sendable {
     }
 }
 
-enum WorkoutKind: String, Sendable {
+enum WorkoutKind: String, Codable, Sendable {
     case a, b, upper1, lower1, upper2, lower2
 
     var title: String {

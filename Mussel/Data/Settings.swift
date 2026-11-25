@@ -44,11 +44,13 @@ enum Debug {
 
     /// Forget the onboarding answers, as after a fresh install.
     static var reset: Bool { args.bool(forKey: "MusselDebugReset") }
-    /// onboarding | program | library | exercise
+    /// onboarding | program | library | exercise | workout
     static var screen: String? { args.string(forKey: "MusselDebugScreen") }
     static var exercise: ExerciseID? { args.string(forKey: "MusselDebugExercise").flatMap(ExerciseID.init) }
     /// 0, 1 or 2: the phase the program screen opens on.
     static var phase: Int? { args.object(forKey: "MusselDebugPhase") == nil ? nil : args.integer(forKey: "MusselDebugPhase") }
+    /// repsLeft | rest | feeling | summary: how far the workout screen plays itself.
+    static var workoutStage: String? { args.string(forKey: "MusselDebugWorkoutStage") }
     static var days: Int? { args.object(forKey: "MusselDebugDays") == nil ? nil : args.integer(forKey: "MusselDebugDays") }
 }
 #endif

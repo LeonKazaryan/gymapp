@@ -4,6 +4,7 @@ import UIKit
 @main
 struct MusselApp: App {
     @State private var settings = Settings()
+    @State private var training = TrainingStore()
 
     init() {
         Self.styleNavigationBars()
@@ -13,6 +14,7 @@ struct MusselApp: App {
         WindowGroup {
             RootView()
                 .environment(settings)
+                .environment(training)
                 .preferredColorScheme(.dark)
                 .tint(Palette.accent)
         }
