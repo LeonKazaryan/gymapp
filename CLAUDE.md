@@ -42,6 +42,8 @@ xcodebuild -project Mussel.xcodeproj -scheme Mussel \
 ## Workouts and weights
 
 - `Domain/Coach.swift` — the rules from the coach doc: the next workout (A/B turns, phases of ≥4 weeks and ≥75% of their workouts, week 1 = 2 sets), the first weight (lightest, then «0–1 / 2–3 / 4+» set by set, max 4 trial sets; «4+» on the first set = two steps), progression after «Легко / Нормально / Тяжело», breaks (2–3 weeks −10%, 4+ weeks −20% and the phase restarts), «Болит» (swap next time; pain again → see a doctor).
+- `Domain/ProgramBuilder.swift` — the person's program: the base program from `Program.swift` changed by the onboarding answers (focus moves sets between glutes/legs, arms and chest/back; goal changes reps and rests; experience, goal «confidence» and age change the machines phase to 2 or 6 weeks; under 16 and 50+ get no barbell; 45/75 minutes remove or add an exercise; missing kit and switched-off exercises are swapped). Each change adds a `ProgramNote`, shown as «Почему такая программа». Rules are drafts for the coaches; every one has a test in `ProgramBuilderTests`.
+- Sex only pre-selects the focus (women → glutes and legs); it never changes the program by itself.
 - `Domain/WorkoutRun.swift` — a workout in progress as a state machine (`stage`: lifting, repsLeft, feeling, resting, finished). `Features/Workout/` only shows it.
 - `Data/TrainingStore.swift` — the log as JSON in Application Support, on the device only.
 - Every rule change goes with a test in `CoachTests` / `WorkoutRunTests`.
@@ -64,6 +66,7 @@ xcrun simctl io "iPhone 16 Pro" screenshot shot.png
 ```
 
 - `-MusselDebugScreen onboarding|program|library|exercise|workout|profile`, `-MusselDebugOnboardingStep 0…6`, `-MusselDebugExercise <ExerciseID>`, `-MusselDebugPhase 0|1|2`, `-MusselDebugDays 2|3|4`, `-MusselDebugReset YES` (forget onboarding and the training log).
+- Preset answers without tapping: `xcrun simctl spawn "iPhone 16 Pro" defaults write com.leonkazaryan.mussel focus -string glutesLegs` (keys in `Settings.Key`).
 - `-MusselDebugWorkoutStage repsLeft|rest|feeling|summary` with `-MusselDebugScreen workout`: the workout plays itself up to that point. `summary` saves a real workout to the log.
 
 ## Environment

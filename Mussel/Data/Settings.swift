@@ -31,8 +31,40 @@ final class Settings {
         didSet { defaults.set(missingKit.map(\.rawValue), forKey: Key.missingKit) }
     }
 
-    /// Exercises the program swaps out because the gym lacks their kit.
-    var unavailableExercises: Set<ExerciseID> { GymKit.unavailable(missingKit) }
+    var sex: Sex? {
+        didSet { defaults.set(sex?.rawValue, forKey: Key.sex) }
+    }
+
+    var focus: Focus {
+        didSet { defaults.set(focus.rawValue, forKey: Key.focus) }
+    }
+
+    var experience: Experience {
+        didSet { defaults.set(experience.rawValue, forKey: Key.experience) }
+    }
+
+    /// 45, 60 or 75.
+    var sessionMinutes: Int {
+        didSet { defaults.set(sessionMinutes, forKey: Key.sessionMinutes) }
+    }
+
+    /// Exercises the person never wants offered.
+    var disabledExercises: Set<ExerciseID> {
+        didSet { defaults.set(disabledExercises.map(\.rawValue), forKey: Key.disabled) }
+    }
+
+    /// Exercises the program swaps out: the gym lacks their kit, or they're switched off.
+    var unavailableExercises: Set<ExerciseID> { GymKit.unavailable(missingKit).union(disabledExercises) }
+
+    var profile: TrainingProfile {
+        TrainingProfile(
+            daysPerWeek: daysPerWeek, sex: sex, goal: goal, focus: focus, experience: experience,
+            age: age, sessionMinutes: sessionMinutes, unavailable: unavailableExercises
+        )
+    }
+
+    /// The program built from all the answers.
+    var program: PersonalProgram { ProgramBuilder.build(profile) }
 
     /// Under 16 the coach doc asks for a coach nearby.
     var isMinor: Bool { (age ?? 99) < 16 }
@@ -57,6 +89,11 @@ final class Settings {
         bodyWeight = defaults.object(forKey: Key.bodyWeight) as? Double
         health = Set((defaults.stringArray(forKey: Key.health) ?? []).compactMap(HealthFlag.init))
         missingKit = Set((defaults.stringArray(forKey: Key.missingKit) ?? []).compactMap(GymKit.init))
+        sex = defaults.string(forKey: Key.sex).flatMap(Sex.init)
+        focus = defaults.string(forKey: Key.focus).flatMap(Focus.init) ?? .balanced
+        experience = defaults.string(forKey: Key.experience).flatMap(Experience.init) ?? .none
+        sessionMinutes = defaults.object(forKey: Key.sessionMinutes) as? Int ?? 60
+        disabledExercises = Set((defaults.stringArray(forKey: Key.disabled) ?? []).compactMap(ExerciseID.init))
         #if DEBUG
         if let screen = Debug.screen, screen != "onboarding" { isOnboarded = true }
         if let days = Debug.days { daysPerWeek = days }
@@ -71,7 +108,12 @@ final class Settings {
         static let bodyWeight = "bodyWeight"
         static let health = "health"
         static let missingKit = "missingKit"
-        static let all = [days, onboarded, goal, age, bodyWeight, health, missingKit]
+        static let sex = "sex"
+        static let focus = "focus"
+        static let experience = "experience"
+        static let sessionMinutes = "sessionMinutes"
+        static let disabled = "disabledExercises"
+        static let all = [days, onboarded, goal, age, bodyWeight, health, missingKit, sex, focus, experience, sessionMinutes, disabled]
     }
 }
 

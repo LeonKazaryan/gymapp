@@ -4,7 +4,7 @@ import SwiftUI
 /// given and can be changed later in the profile.
 struct OnboardingView: View {
     enum Step: Int, CaseIterable {
-        case welcome, goal, about, health, days, gym, ready
+        case welcome, about, goal, health, schedule, gym, ready
     }
 
     @Environment(Settings.self) private var settings
@@ -39,6 +39,10 @@ struct OnboardingView: View {
         }
         .centered(maxWidth: 560)
         .screenBackground()
+        .onChange(of: settings.sex) { _, sex in
+            // The focus question comes pre-answered with what most people pick; it can be changed.
+            settings.focus = Focus.suggested(for: sex)
+        }
         #if DEBUG
         .onAppear { if let debug = Debug.onboardingStep.flatMap(Step.init) { step = debug } }
         #endif
@@ -51,21 +55,27 @@ struct OnboardingView: View {
         switch step {
         case .welcome:
             welcome
+        case .about:
+            QuestionPage(title: String(localized: "A little about you"), subtitle: String(localized: "It shapes your program. Your weight is only for tracking progress, so you can skip it.")) {
+                AboutYou(sex: settings.sex, age: settings.age, bodyWeight: settings.bodyWeight, experience: settings.experience)
+            }
         case .goal:
             QuestionPage(title: String(localized: "What brings you to the gym?"), subtitle: String(localized: "Pick the one that matters most.")) {
-                GoalPicker(goal: settings.goal)
-            }
-        case .about:
-            QuestionPage(title: String(localized: "A little about you"), subtitle: String(localized: "Your weight is only for tracking your progress. You can skip it.")) {
-                AboutFields(age: settings.age, bodyWeight: settings.bodyWeight)
+                VStack(alignment: .leading, spacing: 22) {
+                    GoalPicker(goal: settings.goal)
+                    VStack(spacing: 10) {
+                        FieldLabel(text: String(localized: "What to build first"))
+                        FocusPicker(focus: settings.focus)
+                    }
+                }
             }
         case .health:
             QuestionPage(title: String(localized: "Anything from this list?"), subtitle: String(localized: "Tick what applies. If nothing does, just go on.")) {
                 HealthChecklist(flags: settings.health)
             }
-        case .days:
-            QuestionPage(title: String(localized: "How many days a week can you train?"), subtitle: String(localized: "You can change it any time on the program screen.")) {
-                DaysChoice(days: settings.daysPerWeek)
+        case .schedule:
+            QuestionPage(title: String(localized: "How much can you train?"), subtitle: String(localized: "You can change it any time in your profile.")) {
+                ScheduleFields(days: settings.daysPerWeek, minutes: settings.sessionMinutes)
             }
         case .gym:
             QuestionPage(title: String(localized: "What does your gym have?"), subtitle: String(localized: "Tap what's missing and the program will use swaps. Not sure? Leave everything on; the «Machine taken» button helps on the day.")) {
@@ -226,6 +236,7 @@ private struct ReadyPage: View {
                     point("scalemass", String(localized: "On the first workout we'll find your weights together."))
                     point("hand.thumbsup", String(localized: "After each exercise: easy, normal or hard. The app takes it from there."))
                 }
+                WhyCard(notes: settings.program.notes)
                 firstWorkout
                 if !settings.health.isEmpty || settings.isMinor {
                     Note(icon: "stethoscope", text: String(localized: "Remember: see a doctor and start with a coach before training on your own."), warning: true)
@@ -240,8 +251,7 @@ private struct ReadyPage: View {
     }
 
     private var firstWorkout: some View {
-        let swapped = plan.exercises.filter { $0.swapReason == .missing }.count
-        return VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 14) {
             Eyebrow(String(localized: "Your first workout"))
             Text(plan.kind.title)
                 .font(Typography.title)
@@ -262,9 +272,6 @@ private struct ReadyPage: View {
                     .opacity(appeared ? 1 : 0)
                     .animation(Motion.smooth.delay(0.15 + Double(index) * Motion.stagger), value: appeared)
                 }
-            }
-            if swapped > 0 {
-                Note(icon: "arrow.triangle.swap", text: String(localized: "\(swapped) exercises swapped for what your gym has."))
             }
         }
         .padding(16)

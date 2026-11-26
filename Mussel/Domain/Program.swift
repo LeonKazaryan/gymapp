@@ -7,9 +7,9 @@ enum RepUnit: String, Codable, Sendable {
 
 /// One line of a workout: "Leg Press, 3 × 10–12".
 struct Prescription: Hashable, Codable, Sendable {
-    let exercise: ExerciseID
-    let sets: Int
-    let target: ClosedRange<Int>
+    var exercise: ExerciseID
+    var sets: Int
+    var target: ClosedRange<Int>
     var unit: RepUnit = .reps
     var perSide = false
 
@@ -43,17 +43,21 @@ enum WorkoutKind: String, Codable, Sendable {
 
 struct WorkoutTemplate: Hashable, Sendable {
     let kind: WorkoutKind
-    let items: [Prescription]
+    var items: [Prescription]
 }
 
 struct Phase: Sendable {
     /// Workouts in the order they rotate: A, B, A, B… or upper, lower, upper, lower.
-    let workouts: [WorkoutTemplate]
+    var workouts: [WorkoutTemplate]
 }
 
 struct Program: Sendable {
     let daysPerWeek: Int
-    let phases: [Phase]
+    var phases: [Phase]
+    /// How long each phase lasts at least, in weeks.
+    var phaseWeeks = [4, 4, 4]
+    /// Seconds of rest between sets in each phase.
+    var rest = [75, 90, 120]
 
     static func forDays(_ days: Int) -> Program {
         switch days {
@@ -71,9 +75,10 @@ struct Program: Sendable {
         }
     }
 
-    /// Seconds of rest between sets in each phase.
-    static func restSeconds(phase: Int) -> Int {
-        [75, 90, 120][min(phase, 2)]
+    /// The week a phase starts and ends on, from 1, counting the phases before it.
+    func weeks(ofPhase index: Int) -> ClosedRange<Int> {
+        let start = phaseWeeks.prefix(index).reduce(0, +) + 1
+        return start...(start + phaseWeeks[index] - 1)
     }
 }
 

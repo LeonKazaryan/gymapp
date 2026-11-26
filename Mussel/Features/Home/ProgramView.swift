@@ -11,13 +11,15 @@ struct ProgramView: View {
 
     var body: some View {
         @Bindable var settings = settings
-        let program = Program.forDays(settings.daysPerWeek)
+        let personal = settings.program
+        let program = personal.program
         let next = store.nextWorkout(for: settings)
         ScrollView {
             VStack(alignment: .leading, spacing: 26) {
                 NextWorkoutCard(plan: next, lastWorkout: store.log.lastWorkout) {
                     workout = store.nextWorkout(for: settings)
                 }
+                WhyCard(notes: personal.notes)
                 VStack(alignment: .leading, spacing: 12) {
                     DaysPicker(days: $settings.daysPerWeek)
                     Text(program.weekPlan)
@@ -27,8 +29,8 @@ struct ProgramView: View {
                         .padding(.horizontal, 4)
                 }
                 VStack(alignment: .leading, spacing: 12) {
-                    PhasePicker(selection: $phase)
-                    phaseNotes
+                    PhasePicker(selection: $phase, program: program)
+                    phaseNotes(program)
                 }
                 ForEach(program.phases[phase].workouts, id: \.kind) { workout in
                     WorkoutCard(workout: workout)
@@ -71,9 +73,9 @@ struct ProgramView: View {
         #endif
     }
 
-    private var phaseNotes: some View {
+    private func phaseNotes(_ program: Program) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Label(Program.restNote(phase: phase), systemImage: "timer")
+            Label(program.restNote(phase: phase), systemImage: "timer")
             if let note = Program.phaseNote(phase) {
                 Label(note, systemImage: "info.circle")
             }
@@ -122,6 +124,7 @@ private struct DaysPicker: View {
 /// The three 4-week phases: machines, dumbbells, barbell.
 private struct PhasePicker: View {
     @Binding var selection: Int
+    let program: Program
 
     var body: some View {
         HStack(spacing: 8) {
@@ -135,7 +138,7 @@ private struct PhasePicker: View {
                         Capsule()
                             .fill(color)
                             .frame(width: 28, height: 4)
-                        Text(Program.phaseWeeks(index))
+                        Text(program.phaseWeeksText(index))
                             .font(Typography.caption)
                             .foregroundStyle(Palette.secondary)
                         Text(Program.phaseName(index))

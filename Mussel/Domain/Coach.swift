@@ -39,20 +39,26 @@ struct PlannedWorkout: Identifiable, Sendable {
     var kind: WorkoutKind
     var exercises: [PlannedExercise]
     var comeback: Comeback?
-
-    var restSeconds: Int { Program.restSeconds(phase: phase) }
+    var restSeconds: Int
 }
 
 /// The rules from the coach doc: which workout is next, what weight to start from, and how
 /// the weight changes after each workout. No UI, no storage.
 enum Coach {
-    /// A phase lasts at least four weeks and until 75% of its workouts are done.
-    static func phaseQuota(daysPerWeek: Int) -> Int {
-        Int((Double(4 * daysPerWeek) * 0.75).rounded(.up))
+    /// A phase lasts its weeks at least, and until 75% of its workouts are done.
+    static func phaseQuota(daysPerWeek: Int, weeks: Int = 4) -> Int {
+        Int((Double(weeks * daysPerWeek) * 0.75).rounded(.up))
     }
 
-    /// The next workout on `date`. Exercises in `unavailable` (the gym lacks the kit) are swapped.
+    /// The next workout of the standard program, for someone who answered nothing else.
     static func plan(_ log: TrainingLog, daysPerWeek: Int, unavailable: Set<ExerciseID> = [], on date: Date, calendar: Calendar = .current) -> PlannedWorkout {
+        let program = ProgramBuilder.build(TrainingProfile(daysPerWeek: daysPerWeek, unavailable: unavailable)).program
+        return plan(log, program: program, unavailable: unavailable, on: date, calendar: calendar)
+    }
+
+    /// The next workout of `program` on `date`. Exercises in `unavailable` never come up as swaps.
+    static func plan(_ log: TrainingLog, program: Program, unavailable: Set<ExerciseID> = [], on date: Date, calendar: Calendar = .current) -> PlannedWorkout {
+        let daysPerWeek = program.daysPerWeek
         let comeback = log.lastWorkout.flatMap { Comeback.after(days: days(from: $0, to: date, calendar)) }
         var phase = log.phase
         var phaseStart = log.phaseStart ?? date
@@ -60,13 +66,14 @@ enum Coach {
         if comeback == .restart {
             phaseStart = date
             done = 0
-        } else if phase < 2, days(from: phaseStart, to: date, calendar) >= 28, done >= phaseQuota(daysPerWeek: daysPerWeek) {
+        } else if phase < 2, days(from: phaseStart, to: date, calendar) >= program.phaseWeeks[phase] * 7,
+                  done >= phaseQuota(daysPerWeek: daysPerWeek, weeks: program.phaseWeeks[phase]) {
             phase += 1
             phaseStart = date
             done = 0
         }
         let week = days(from: phaseStart, to: date, calendar) / 7 + 1
-        let workouts = Program.forDays(daysPerWeek).phases[phase].workouts
+        let workouts = program.phases[phase].workouts
         let template = workouts[done % workouts.count]
         let firstWeek = phase == 0 && week == 1 && log.history.count < daysPerWeek
         let exercises = template.items.map { item in
@@ -74,7 +81,7 @@ enum Coach {
         }
         return PlannedWorkout(
             phase: phase, phaseStart: phaseStart, workoutsInPhase: done, week: week,
-            kind: template.kind, exercises: exercises, comeback: comeback
+            kind: template.kind, exercises: exercises, comeback: comeback, restSeconds: program.rest[phase]
         )
     }
 
@@ -215,7 +222,8 @@ enum Coach {
 }
 
 extension Prescription {
+    /// The same sets and reps of another exercise. Reps count per side when it's one-sided.
     func swapped(to exercise: ExerciseID) -> Prescription {
-        Prescription(exercise: exercise, sets: sets, target: target, unit: unit, perSide: perSide)
+        Prescription(exercise: exercise, sets: sets, target: target, unit: unit, perSide: Exercise.with(exercise).isUnilateral)
     }
 }

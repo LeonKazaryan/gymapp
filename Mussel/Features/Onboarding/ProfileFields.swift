@@ -246,3 +246,146 @@ struct KitGrid: View {
         .sensoryFeedback(Haptics.select, trigger: missing)
     }
 }
+
+/// A row of pills, one of them chosen.
+struct PillPicker<Value: Hashable>: View {
+    @Binding var selection: Value
+    let options: [(value: Value, label: String)]
+
+    var body: some View {
+        HStack(spacing: 6) {
+            ForEach(options.indices, id: \.self) { i in
+                let selected = options[i].value == selection
+                Button {
+                    withAnimation(Motion.snappy) { selection = options[i].value }
+                } label: {
+                    Text(options[i].label)
+                        .font(Typography.label)
+                        .foregroundStyle(selected ? Palette.ink : Palette.text)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .background(selected ? Palette.text : Palette.raised, in: Capsule())
+                }
+                .buttonStyle(.pressable)
+                .accessibilityAddTraits(selected ? .isSelected : [])
+            }
+        }
+        .sensoryFeedback(Haptics.select, trigger: selection)
+    }
+}
+
+/// A small heading over a field.
+struct FieldLabel: View {
+    let text: String
+
+    var body: some View {
+        Eyebrow(text)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+/// Sex, age and weight, and how much they've trained.
+struct AboutYou: View {
+    @Binding var sex: Sex?
+    @Binding var age: Int?
+    @Binding var bodyWeight: Double?
+    @Binding var experience: Experience
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 22) {
+            VStack(spacing: 10) {
+                FieldLabel(text: String(localized: "Sex"))
+                PillPicker(selection: $sex, options: Sex.allCases.map { ($0, $0.title) } + [(nil, String(localized: "Not saying"))])
+            }
+            AboutFields(age: $age, bodyWeight: $bodyWeight)
+            VStack(spacing: 10) {
+                FieldLabel(text: String(localized: "Gym experience"))
+                PillPicker(selection: $experience, options: Experience.allCases.map { ($0, $0.title) })
+            }
+        }
+    }
+}
+
+/// What to build first, each pictured by a move.
+struct FocusPicker: View {
+    @Binding var focus: Focus
+
+    var body: some View {
+        HStack(spacing: 10) {
+            ForEach(Focus.allCases, id: \.self) { option in
+                let selected = option == focus
+                Button {
+                    withAnimation(Motion.snappy) { focus = option }
+                } label: {
+                    VStack(spacing: 8) {
+                        DemoView(demo: Demos.of(option.picture), isPlaying: selected, framesPerSecond: 30)
+                            .aspectRatio(1, contentMode: .fit)
+                            .demoStage(cornerRadius: 14)
+                        Text(option.title)
+                            .font(Typography.caption)
+                            .foregroundStyle(selected ? Palette.text : Palette.secondary)
+                            .multilineTextAlignment(.center)
+                            .lineLimit(2, reservesSpace: true)
+                    }
+                    .padding(8)
+                    .background(selected ? Palette.accent.opacity(0.12) : Palette.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .strokeBorder(selected ? Palette.accent : Palette.hairline, lineWidth: selected ? 1.5 : 1)
+                    }
+                }
+                .buttonStyle(.pressable)
+                .accessibilityAddTraits(selected ? .isSelected : [])
+            }
+        }
+        .sensoryFeedback(Haptics.select, trigger: focus)
+    }
+}
+
+/// Days a week and minutes a workout.
+struct ScheduleFields: View {
+    @Binding var days: Int
+    @Binding var minutes: Int
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 22) {
+            DaysChoice(days: $days)
+            VStack(spacing: 10) {
+                FieldLabel(text: String(localized: "Time per workout"))
+                PillPicker(selection: $minutes, options: [45, 60, 75].map { ($0, String(localized: "\($0) min")) })
+            }
+        }
+    }
+}
+
+/// Why the program looks like it does: a line for every answer that changed it.
+struct WhyCard: View {
+    let notes: [ProgramNote]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Eyebrow(String(localized: "Why this program"))
+            if notes.isEmpty {
+                Text("The base program, as the coaches wrote it.")
+                    .font(Typography.caption)
+                    .foregroundStyle(Palette.secondary)
+            }
+            ForEach(notes, id: \.self) { note in
+                HStack(alignment: .top, spacing: 12) {
+                    Image(systemName: note.symbol)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Palette.accent)
+                        .frame(width: 22)
+                    Text(note.text)
+                        .font(Typography.caption)
+                        .foregroundStyle(Palette.text)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .card(cornerRadius: 22)
+    }
+}

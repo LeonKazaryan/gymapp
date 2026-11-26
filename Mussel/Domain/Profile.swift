@@ -120,3 +120,71 @@ enum GymKit: String, CaseIterable, Codable, Sendable {
         missing.reduce(into: Set<ExerciseID>()) { $0.formUnion($1.exercises) }
     }
 }
+
+enum Sex: String, CaseIterable, Codable, Sendable {
+    case female, male
+
+    var title: String {
+        switch self {
+        case .female: String(localized: "Woman")
+        case .male: String(localized: "Man")
+        }
+    }
+}
+
+/// What to build first. The total work stays about the same; the focus moves it around.
+enum Focus: String, CaseIterable, Codable, Sendable {
+    case glutesLegs, balanced, upper
+
+    /// What most people pick, so the question comes pre-answered.
+    static func suggested(for sex: Sex?) -> Focus {
+        sex == .female ? .glutesLegs : .balanced
+    }
+
+    var picture: ExerciseID {
+        switch self {
+        case .glutesLegs: .gluteBridge
+        case .balanced: .legPress
+        case .upper: .chestPress
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .glutesLegs: String(localized: "Glutes and legs")
+        case .balanced: String(localized: "Everything evenly")
+        case .upper: String(localized: "Upper body")
+        }
+    }
+}
+
+enum Experience: String, CaseIterable, Codable, Sendable {
+    /// Never trained.
+    case none
+    /// Tried a few times.
+    case little
+    /// Trained before, coming back.
+    case before
+
+    var title: String {
+        switch self {
+        case .none: String(localized: "Never")
+        case .little: String(localized: "A few times")
+        case .before: String(localized: "Trained before")
+        }
+    }
+}
+
+/// Everything the program is built from.
+struct TrainingProfile: Hashable, Sendable {
+    var daysPerWeek = 3
+    var sex: Sex?
+    var goal: Goal?
+    var focus = Focus.balanced
+    var experience = Experience.none
+    var age: Int?
+    /// 45, 60 or 75 minutes.
+    var sessionMinutes = 60
+    /// Missing kit and exercises the person switched off.
+    var unavailable: Set<ExerciseID> = []
+}

@@ -131,6 +131,68 @@
         }
       }
     },
+    "%lld exercises swapped: not in your gym or switched off." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld exercise swapped: not in your gym or switched off."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld exercises swapped: not in your gym or switched off."
+                }
+              }
+            }
+          }
+        },
+        "ru" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld упражнение заменено: его нет в зале или оно отключено."
+                }
+              },
+              "few" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld упражнения заменены: их нет в зале или они отключены."
+                }
+              },
+              "many" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld упражнений заменено: их нет в зале или они отключены."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld упражнения заменены: их нет в зале или они отключены."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld min" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld мин"
+          }
+        }
+      }
+    },
     "%lld reps" : {
       "localizations" : {
         "en" : {
@@ -321,12 +383,42 @@
         }
       }
     },
+    "45 minutes: 5 exercises per workout." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "45 минут: 5 упражнений за тренировку."
+          }
+        }
+      }
+    },
+    "75 minutes: one more exercise per workout." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "75 минут: на одно упражнение больше."
+          }
+        }
+      }
+    },
     "A 12-week program from machines to the barbell, and every exercise shown so you know what to do and where." : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Программа на 12 недель — от тренажёров до штанги. Каждое упражнение показано: что делать, на каком тренажёре и как."
+          }
+        }
+      }
+    },
+    "A few times" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пару раз"
           }
         }
       }
@@ -1091,16 +1183,6 @@
         }
       }
     },
-    "Days a week" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Дней в неделю"
-          }
-        }
-      }
-    },
     "Dead Bug" : {
       "localizations" : {
         "ru" : {
@@ -1127,6 +1209,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Вверху не стучать гантелями"
+          }
+        }
+      }
+    },
+    "Don't offer this exercise" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не предлагать это упражнение"
           }
         }
       }
@@ -1227,6 +1319,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Внизу гантели на уровне ушей"
+          }
+        }
+      }
+    },
+    "Dumbbells instead of the barbell: easier on the joints." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Гантели вместо штанги: бережнее к суставам."
           }
         }
       }
@@ -1357,6 +1459,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локти гуляют, вес давит корпусом"
+          }
+        }
+      }
+    },
+    "Everything evenly" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всё поровну"
+          }
+        }
+      }
+    },
+    "Everything evenly, as the coaches wrote it." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всё поровну, как написали тренеры."
           }
         }
       }
@@ -1501,6 +1623,26 @@
         }
       }
     },
+    "Focus on glutes and legs: glute work instead of arm moves, and a little less pressing." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фокус на ягодицы и ноги: вместо упражнений на руки — ягодицы, а жимов чуть меньше."
+          }
+        }
+      }
+    },
+    "Focus on the upper body: more sets for chest and back, and a chest or arm move instead of a second leg move." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фокус на верх тела: больше подходов на грудь и спину, а вместо второго упражнения на ноги — грудь или руки."
+          }
+        }
+      }
+    },
     "Foot in the middle of the platform" : {
       "localizations" : {
         "ru" : {
@@ -1591,6 +1733,16 @@
         }
       }
     },
+    "Glutes and legs" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ягодицы и ноги"
+          }
+        }
+      }
+    },
     "Go" : {
       "localizations" : {
         "ru" : {
@@ -1641,6 +1793,36 @@
         }
       }
     },
+    "Goal: feel at home in the gym." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цель — перестать теряться в зале."
+          }
+        }
+      }
+    },
+    "Goal: shape. 12–15 reps on the smaller moves and shorter rests." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цель — форма: в небольших упражнениях 12–15 повторов, отдых короче."
+          }
+        }
+      }
+    },
+    "Goal: strength. From the dumbbell phase, 6–10 reps and longer rests on the big moves." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Цель — сила: с фазы гантелей в базовых упражнениях 6–10 повторов и отдых дольше."
+          }
+        }
+      }
+    },
     "Goblet Squat" : {
       "localizations" : {
         "ru" : {
@@ -1677,6 +1859,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Гравитрон"
+          }
+        }
+      }
+    },
+    "Gym experience" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Опыт в зале"
           }
         }
       }
@@ -1921,22 +2113,22 @@
         }
       }
     },
-    "How many days a week can you train?" : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Сколько раз в неделю получится тренироваться?"
-          }
-        }
-      }
-    },
     "How many more reps could you have done?" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сколько ещё повторов получилось бы сделать?"
+          }
+        }
+      }
+    },
+    "How much can you train?" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сколько получится тренироваться?"
           }
         }
       }
@@ -2037,6 +2229,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Болит"
+          }
+        }
+      }
+    },
+    "It shapes your program. Your weight is only for tracking progress, so you can skip it." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "От этого зависит программа. Вес нужен только для прогресса, его можно не указывать."
           }
         }
       }
@@ -2771,6 +2973,16 @@
         }
       }
     },
+    "Man" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Парень"
+          }
+        }
+      }
+    },
     "More" : {
       "localizations" : {
         "ru" : {
@@ -2797,6 +3009,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Отводить ногу ягодицей, а не поясницей"
+          }
+        }
+      }
+    },
+    "Never" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Никогда"
           }
         }
       }
@@ -2881,12 +3103,32 @@
         }
       }
     },
+    "Not saying" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не скажу"
+          }
+        }
+      }
+    },
     "OK" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Понятно"
+          }
+        }
+      }
+    },
+    "Offer it again" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вернуть в программу"
           }
         }
       }
@@ -3511,6 +3753,16 @@
         }
       }
     },
+    "Schedule" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Расписание"
+          }
+        }
+      }
+    },
     "Seated Cable Row" : {
       "localizations" : {
         "ru" : {
@@ -3597,6 +3849,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ограничители чуть ниже нижней точки"
+          }
+        }
+      }
+    },
+    "Sex" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пол"
           }
         }
       }
@@ -4001,6 +4263,26 @@
         }
       }
     },
+    "Switched off" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отключённые упражнения"
+          }
+        }
+      }
+    },
+    "Switched off: the program won't offer it and uses a swap instead." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отключено: программа не будет его предлагать и поставит замену."
+          }
+        }
+      }
+    },
     "Tap what's missing and the program will use swaps. Not sure? Leave everything on; the «Machine taken» button helps on the day." : {
       "localizations" : {
         "ru" : {
@@ -4051,12 +4333,32 @@
         }
       }
     },
+    "The base program, as the coaches wrote it." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Базовая программа, как её написали тренеры."
+          }
+        }
+      }
+    },
     "The first two barbell workouts use an empty bar: technique only." : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Первые две тренировки со штангой — пустой гриф, только техника."
+          }
+        }
+      }
+    },
+    "The machines phase is 6 weeks, to get comfortable without rushing." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Фаза тренажёров — 6 недель, чтобы освоиться без спешки."
           }
         }
       }
@@ -4131,12 +4433,32 @@
         }
       }
     },
+    "Time per workout" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Время на тренировку"
+          }
+        }
+      }
+    },
     "Torso upright" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Корпус прямо"
+          }
+        }
+      }
+    },
+    "Trained before" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Был опыт"
           }
         }
       }
@@ -4211,6 +4533,16 @@
         }
       }
     },
+    "Under 16: no barbell, and train with a coach nearby." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "До 16 лет: без штанги и с тренером рядом."
+          }
+        }
+      }
+    },
     "Up slowly, to a right angle at the elbow" : {
       "localizations" : {
         "ru" : {
@@ -4257,6 +4589,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Середина спины"
+          }
+        }
+      }
+    },
+    "Upper body" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Верх тела"
           }
         }
       }
@@ -4361,6 +4703,16 @@
         }
       }
     },
+    "What to build first" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Что прокачать в первую очередь"
+          }
+        }
+      }
+    },
     "What you've done so far counts if you save." : {
       "localizations" : {
         "ru" : {
@@ -4381,12 +4733,32 @@
         }
       }
     },
+    "Why this program" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Почему такая программа"
+          }
+        }
+      }
+    },
     "Wide grip, stand tall" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Широкий хват, стоять ровно"
+          }
+        }
+      }
+    },
+    "Woman" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Девушка"
           }
         }
       }
@@ -4421,12 +4793,22 @@
         }
       }
     },
-    "You can change it any time on the program screen." : {
+    "You can change it any time in your profile." : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Это можно поменять в любой момент на экране программы."
+            "value" : "Это можно поменять в любой момент в профиле."
+          }
+        }
+      }
+    },
+    "You've trained before, so the machines phase is 2 weeks." : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Опыт уже есть, поэтому фаза тренажёров — 2 недели."
           }
         }
       }
@@ -4467,16 +4849,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Программа готова"
-          }
-        }
-      }
-    },
-    "Your weight is only for tracking your progress. You can skip it." : {
-      "localizations" : {
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Вес нужен только чтобы следить за прогрессом. Можно не указывать."
           }
         }
       }

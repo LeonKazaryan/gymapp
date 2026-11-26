@@ -167,7 +167,7 @@ struct WorkoutRunTests {
         let row = PlannedExercise(prescription: .reps(.seatedCableRow, 2, 10...12), weight: 15, targetReps: 10, calibrate: false)
         var withSwap = press
         withSwap.swaps = [PlannedExercise(prescription: .reps(.gobletSquat, 2, 10...12), weight: 8, targetReps: 10, calibrate: true)]
-        let plan = PlannedWorkout(phase: 0, phaseStart: now, workoutsInPhase: 0, week: 1, kind: .a, exercises: [withSwap, row], comeback: nil)
+        let plan = PlannedWorkout(phase: 0, phaseStart: now, workoutsInPhase: 0, week: 1, kind: .a, exercises: [withSwap, row], comeback: nil, restSeconds: 75)
         return WorkoutRun(plan: plan, started: now)
     }
 
@@ -237,13 +237,12 @@ struct WorkoutRunTests {
 struct GymKitTests {
     let day0 = Date(timeIntervalSince1970: 1_800_000_000)
 
-    @Test func missingMachinesUseTheirSwaps() throws {
+    @Test func missingMachinesUseTheirSwaps() {
         let unavailable = GymKit.unavailable([.chestPress, .legPress])
         let plan = Coach.plan(TrainingLog(), daysPerWeek: 3, unavailable: unavailable, on: day0)
         let ids = plan.exercises.map(\.prescription.exercise)
         #expect(!ids.contains(.chestPress) && !ids.contains(.legPress))
-        let push = try #require(plan.exercises.first { $0.replaces == .chestPress })
-        #expect(push.prescription.exercise == .pushUp && push.swapReason == .missing)
+        #expect(ids.contains(.pushUp) && ids.contains(.gobletSquat))
     }
 
     @Test func whenTheSwapIsMissingTooTheChainGoesOn() {

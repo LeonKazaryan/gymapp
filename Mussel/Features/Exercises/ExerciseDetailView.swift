@@ -27,6 +27,7 @@ struct ExerciseDetailView: View {
                     }
                 }
                 inProgram
+                switchOff
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 40)
@@ -154,13 +155,34 @@ struct ExerciseDetailView: View {
     }
 
     private var programUses: [(phase: Int, workout: WorkoutKind, prescription: Prescription)] {
-        let program = Program.forDays(settings.daysPerWeek)
+        let program = settings.program.program
         return program.phases.enumerated().flatMap { phase, content in
             content.workouts.flatMap { workout in
                 workout.items
                     .filter { $0.exercise == exercise.id }
                     .map { (phase, workout.kind, $0) }
             }
+        }
+    }
+
+    /// Never offer this exercise: the program uses its swap instead.
+    @ViewBuilder
+    private var switchOff: some View {
+        @Bindable var settings = settings
+        let off = settings.disabledExercises.contains(exercise.id)
+        VStack(alignment: .leading, spacing: 10) {
+            if off {
+                Note(icon: "eye.slash", text: String(localized: "Switched off: the program won't offer it and uses a swap instead."))
+            }
+            Button {
+                withAnimation(Motion.snappy) {
+                    if off { settings.disabledExercises.remove(exercise.id) } else { settings.disabledExercises.insert(exercise.id) }
+                }
+            } label: {
+                Label(off ? String(localized: "Offer it again") : String(localized: "Don't offer this exercise"), systemImage: off ? "arrow.uturn.backward" : "eye.slash")
+            }
+            .buttonStyle(.capsule(.subtle))
+            .sensoryFeedback(Haptics.tap, trigger: off)
         }
     }
 

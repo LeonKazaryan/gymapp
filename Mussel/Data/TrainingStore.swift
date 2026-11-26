@@ -21,7 +21,7 @@ final class TrainingStore {
     }
 
     func nextWorkout(for settings: Settings, on date: Date = .now) -> PlannedWorkout {
-        Coach.plan(log, daysPerWeek: settings.daysPerWeek, unavailable: settings.unavailableExercises, on: date)
+        Coach.plan(log, program: settings.program.program, unavailable: settings.unavailableExercises, on: date)
     }
 
     /// Saves a finished or stopped workout and says what changes next time.
