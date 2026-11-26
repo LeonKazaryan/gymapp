@@ -14,7 +14,7 @@ enum Demos {
 
     private static func make(_ id: ExerciseID) -> Demo {
         switch id {
-        case .legPress: legPress
+        case .legPress: legPress(singleLeg: false)
         case .legExtension: legExtension
         case .legCurl: legCurl
         case .gluteBridge: gluteBridge
@@ -59,6 +59,16 @@ enum Demos {
         case .cableLateralRaise: cableLateralRaise
         case .preacherCurl: preacherCurl
         case .overheadExtension: overheadExtension
+        case .plateChestPress: plateChestPress
+        case .dumbbellFly: dumbbellFly
+        case .machinePullover: machinePullover
+        case .dumbbellPullover: dumbbellPullover
+        case .uprightRow: uprightRow
+        case .tricepsMachine: tricepsMachine
+        case .seatedLegCurl: seatedLegCurl
+        case .standingLegCurl: standingLegCurl
+        case .singleLegPress: legPress(singleLeg: true)
+        case .seatedCalfRaise: seatedCalfRaise
         }
     }
 }
@@ -139,13 +149,15 @@ enum Gym {
 // MARK: - Legs and glutes
 
 private extension Demos {
-    static var legPress: Demo {
+    static func legPress(singleLeg: Bool) -> Demo {
         // The sled runs up and away at 42° to the floor.
         let rail = direction(132)
         let hip = CGPoint(x: 0, y: -0.3)
         func pose(_ reach: Double) -> Pose {
             let ankle = hip + rail * reach
-            return .side(hip: (hip.x, hip.y), torso: 228, nod: 30, arm: .reach(0.04, -0.25), leg: .reach(ankle.x, ankle.y), foot: 222)
+            // One leg works; the other rests bent, its foot on the frame.
+            let rest: Limb? = singleLeg ? .bones(118, 62) : nil
+            return .side(hip: (hip.x, hip.y), torso: 228, nod: 30, arm: .reach(0.04, -0.25), leg: .reach(ankle.x, ankle.y), farLeg: rest, foot: 222, farFoot: singleLeg ? .some(nil) : nil)
         }
         let under = direction(42) * 0.17
         let railStart = hip + rail * 0.22 + under

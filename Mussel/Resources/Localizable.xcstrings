@@ -341,6 +341,16 @@
         }
       }
     },
+    "A narrow grip and pulling the bar up to the chin" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Узкий хват и тяга до подбородка"
+          }
+        }
+      }
+    },
     "A swap next time" : {
       "localizations" : {
         "ru" : {
@@ -467,6 +477,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Прогиб в пояснице"
+          }
+        }
+      }
+    },
+    "Arching the lower back at the top" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Прогиб в пояснице вверху"
           }
         }
       }
@@ -761,6 +781,26 @@
         }
       }
     },
+    "Bend back slowly" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сгибать обратно медленно"
+          }
+        }
+      }
+    },
+    "Bending the elbows and turning it into a triceps move" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сгибать локти, превращая в упражнение на трицепс"
+          }
+        }
+      }
+    },
     "Biceps" : {
       "localizations" : {
         "ru" : {
@@ -837,6 +877,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Выдох на скручивании"
+          }
+        }
+      }
+    },
+    "Bring the bar down to your belly, return slowly" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Опускать перекладину до живота, назад медленно"
           }
         }
       }
@@ -1121,6 +1171,26 @@
         }
       }
     },
+    "Dumbbell Fly" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разводка гантелей лёжа"
+          }
+        }
+      }
+    },
+    "Dumbbell Pullover" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пуловер с гантелью лёжа"
+          }
+        }
+      }
+    },
     "Dumbbell Romanian Deadlift" : {
       "localizations" : {
         "ru" : {
@@ -1211,6 +1281,16 @@
         }
       }
     },
+    "Elbows on the pad, level with the machine's axis" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локти на подушке напротив оси тренажёра"
+          }
+        }
+      }
+    },
     "Elbows pinned to your sides" : {
       "localizations" : {
         "ru" : {
@@ -1257,6 +1337,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Локти неподвижны у корпуса"
+          }
+        }
+      }
+    },
+    "Elbows up to shoulder height, no higher" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Локти до уровня плеч, не выше"
           }
         }
       }
@@ -1411,6 +1501,16 @@
         }
       }
     },
+    "Foot in the middle of the platform" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Стопа в середине платформы"
+          }
+        }
+      }
+    },
     "Four times" : {
       "localizations" : {
         "ru" : {
@@ -1551,6 +1651,26 @@
         }
       }
     },
+    "Going so deep that the hips lift off" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Опускать так глубоко, что отрывается таз"
+          }
+        }
+      }
+    },
+    "Going too deep with heavy dumbbells" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Слишком глубоко с тяжёлыми гантелями"
+          }
+        }
+      }
+    },
     "Gravitron" : {
       "localizations" : {
         "ru" : {
@@ -1681,6 +1801,16 @@
         }
       }
     },
+    "Heel up to your glute" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пятку к ягодице"
+          }
+        }
+      }
+    },
     "Heels come off the platform" : {
       "localizations" : {
         "ru" : {
@@ -1737,6 +1867,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Таз отрывается внизу (слишком глубоко) или колени «защёлкиваются» вверху"
+          }
+        }
+      }
+    },
+    "Hips lift off the seat" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таз отрывается от сиденья"
           }
         }
       }
@@ -1931,12 +2071,32 @@
         }
       }
     },
+    "Knee against the pad, hold the handles" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Колено упирается в валик, держаться за рукояти"
+          }
+        }
+      }
+    },
     "Knee and hand on the bench, back parallel to the floor" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Колено и рука на скамье, спина параллельно полу"
+          }
+        }
+      }
+    },
+    "Knee follows your toes" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Колено по направлению носка"
           }
         }
       }
@@ -2067,6 +2227,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Широчайшие"
+          }
+        }
+      }
+    },
+    "Lead with the elbows" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тянуть локтями вверх"
           }
         }
       }
@@ -2241,6 +2411,16 @@
         }
       }
     },
+    "Lifting the elbows off the pad" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Отрывать локти от подушки"
+          }
+        }
+      }
+    },
     "Light" : {
       "localizations" : {
         "ru" : {
@@ -2267,6 +2447,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Лёгкий вес, медленно"
+          }
+        }
+      }
+    },
+    "Load the same plates on both sides" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Блины одинаковые с двух сторон"
           }
         }
       }
@@ -2321,12 +2511,32 @@
         }
       }
     },
+    "Lower back stays against the pad" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Поясница прижата к спинке"
+          }
+        }
+      }
+    },
     "Lower back stays on the floor the whole time" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Поясница прижата к полу всё время"
+          }
+        }
+      }
+    },
+    "Lower behind your head only as far as is comfortable" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заводить за голову, пока комфортно"
           }
         }
       }
@@ -2467,6 +2677,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Сгибание рук в тренажёре Скотта"
+          }
+        }
+      }
+    },
+    "Machine Pullover" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Пуловер в тренажёре"
           }
         }
       }
@@ -2721,6 +2941,16 @@
         }
       }
     },
+    "Open until you feel a stretch in the chest, no deeper" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разводить до натяжения в груди, не глубже"
+          }
+        }
+      }
+    },
     "Opening too wide and straining the shoulders" : {
       "localizations" : {
         "ru" : {
@@ -2767,6 +2997,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Валик у щиколотки"
+          }
+        }
+      }
+    },
+    "Pad snug on your thighs, balls of the feet on the edge" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валик плотно на бёдрах, носки на краю"
           }
         }
       }
@@ -2851,6 +3091,16 @@
         }
       }
     },
+    "Plate-Loaded Chest Press" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жим от груди в рычажном тренажёре"
+          }
+        }
+      }
+    },
     "Plate-loaded machine" : {
       "localizations" : {
         "ru" : {
@@ -2917,6 +3167,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Программа"
+          }
+        }
+      }
+    },
+    "Pull the heels under the seat, return slowly" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тянуть пятки под сиденье, назад медленно"
           }
         }
       }
@@ -3037,6 +3297,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Толкаться пятками"
+          }
+        }
+      }
+    },
+    "Push with your elbows, not your hands" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Давить локтями, а не кистями"
           }
         }
       }
@@ -3251,12 +3521,32 @@
         }
       }
     },
+    "Seated Calf Raise" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подъём на носки сидя"
+          }
+        }
+      }
+    },
     "Seated Dumbbell Press" : {
       "localizations" : {
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Жим гантелей сидя"
+          }
+        }
+      }
+    },
+    "Seated Leg Curl" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сгибание ног сидя"
           }
         }
       }
@@ -3371,6 +3661,16 @@
         }
       }
     },
+    "Shoulders level with the machine's axis, belt fastened" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Плечи напротив оси тренажёра, ремень пристёгнут"
+          }
+        }
+      }
+    },
     "Shoulders roll forward, shoulder blades leave the pad" : {
       "localizations" : {
         "ru" : {
@@ -3407,6 +3707,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Плечи поднимаются к ушам, забрасывание корпусом"
+          }
+        }
+      }
+    },
+    "Single-Leg Press" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Жим ногами одной ногой"
           }
         }
       }
@@ -3551,6 +3861,16 @@
         }
       }
     },
+    "Standing Leg Curl" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сгибание ноги стоя"
+          }
+        }
+      }
+    },
     "Start by pulling your shoulders down" : {
       "localizations" : {
         "ru" : {
@@ -3611,6 +3931,16 @@
         }
       }
     },
+    "Straighten your arms fully" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выпрямлять руки до конца"
+          }
+        }
+      }
+    },
     "Strap on the ankle, hold the frame" : {
       "localizations" : {
         "ru" : {
@@ -3637,6 +3967,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Раскачка корпусом"
+          }
+        }
+      }
+    },
+    "Swinging the leg with the hips" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Раскачивать ногу тазом"
           }
         }
       }
@@ -3741,6 +4081,16 @@
         }
       }
     },
+    "Thigh pad snug just above the knees" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Валик плотно прижимает бёдра над коленями"
+          }
+        }
+      }
+    },
     "Thighs locked under the pads" : {
       "localizations" : {
         "ru" : {
@@ -3807,6 +4157,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Трицепс"
+          }
+        }
+      }
+    },
+    "Triceps Extension Machine" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Разгибание рук в тренажёре"
           }
         }
       }
@@ -3921,6 +4281,16 @@
         }
       }
     },
+    "Upright Row" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Протяжка со штангой"
+          }
+        }
+      }
+    },
     "Week 1 is two sets of everything, while you learn the moves." : {
       "localizations" : {
         "ru" : {
@@ -4007,6 +4377,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Если времени мало: две тренировки на всё тело."
+          }
+        }
+      }
+    },
+    "Wide grip, stand tall" : {
+      "localizations" : {
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Широкий хват, стоять ровно"
           }
         }
       }

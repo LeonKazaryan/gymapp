@@ -43,7 +43,7 @@ struct DemoRenderer {
         fit(&context, size: size)
         let skeleton = Skeleton(demo.pose(at: moment), camera: demo.camera)
         let load = demo.load(at: moment)
-        drawFloor(&context)
+        if demo.showsFloor { drawFloor(&context) }
         drawProps(.back, skeleton: skeleton, load: load, in: &context)
         drawFigure(skeleton, load: load, in: &context)
         drawProps(.front, skeleton: skeleton, load: load, in: &context)
@@ -56,7 +56,7 @@ struct DemoRenderer {
         let turn = DemoMoment(end: 0, progress: 1)
         let skeleton = Skeleton(demo.pose(at: turn), camera: demo.camera)
         let load = demo.load(at: turn)
-        drawFloor(&context)
+        if demo.showsFloor { drawFloor(&context) }
         drawProps(.back, skeleton: skeleton, load: load, in: &context)
         var ghost = context
         ghost.opacity = 0.22
@@ -448,7 +448,7 @@ extension Skeleton {
 extension Demo {
     /// The scene rectangle that holds the whole rep and the machine, with a little air.
     var bounds: CGRect {
-        var xs: [Double] = [], ys: [Double] = [0]
+        var xs: [Double] = [], ys: [Double] = showsFloor ? [0] : []
         func add(_ p: CGPoint, _ r: Double) {
             xs += [p.x - r, p.x + r]
             ys += [p.y - r, p.y + r]

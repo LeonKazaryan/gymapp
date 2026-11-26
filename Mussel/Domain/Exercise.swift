@@ -84,6 +84,8 @@ enum ExerciseID: String, CaseIterable, Codable, CodingKeyRepresentable, Sendable
     case hackSquat, smithSquat, hipAbduction, hipAdduction, calfRaise, cableKickback, floorGluteBridge
     case pecDeck, cableFly, assistedDip, machineRow, reverseFly, facePull
     case cableLateralRaise, preacherCurl, overheadExtension, abCrunch, kneeRaise
+    case plateChestPress, dumbbellFly, machinePullover, dumbbellPullover, uprightRow, tricepsMachine
+    case seatedLegCurl, standingLegCurl, singleLegPress, seatedCalfRaise
 }
 
 struct Exercise: Identifiable, Hashable, Sendable {
@@ -101,7 +103,7 @@ struct Exercise: Identifiable, Hashable, Sendable {
 
     /// Dumbbell moves done with one dumbbell in each hand show the weight per hand.
     var weightIsPerHand: Bool {
-        equipment == .dumbbell && ![.gobletSquat, .oneArmRow, .overheadExtension].contains(id)
+        equipment == .dumbbell && ![.gobletSquat, .oneArmRow, .overheadExtension, .dumbbellPullover].contains(id)
     }
 
     var name: String {
@@ -151,6 +153,16 @@ struct Exercise: Identifiable, Hashable, Sendable {
         case .overheadExtension: String(localized: "Overhead Dumbbell Extension")
         case .abCrunch: String(localized: "Ab Crunch Machine")
         case .kneeRaise: String(localized: "Captain's Chair Knee Raise")
+        case .plateChestPress: String(localized: "Plate-Loaded Chest Press")
+        case .dumbbellFly: String(localized: "Dumbbell Fly")
+        case .machinePullover: String(localized: "Machine Pullover")
+        case .dumbbellPullover: String(localized: "Dumbbell Pullover")
+        case .uprightRow: String(localized: "Upright Row")
+        case .tricepsMachine: String(localized: "Triceps Extension Machine")
+        case .seatedLegCurl: String(localized: "Seated Leg Curl")
+        case .standingLegCurl: String(localized: "Standing Leg Curl")
+        case .singleLegPress: String(localized: "Single-Leg Press")
+        case .seatedCalfRaise: String(localized: "Seated Calf Raise")
         }
     }
 
@@ -207,5 +219,15 @@ struct Exercise: Identifiable, Hashable, Sendable {
         Exercise(id: .overheadExtension, muscles: [.triceps], level: 2, equipment: .dumbbell, step: 2, startWeight: 6, alternative: .tricepsPushdown),
         Exercise(id: .abCrunch, muscles: [.abs], level: 1, equipment: .machine, step: 5, startWeight: 10, alternative: .deadBug),
         Exercise(id: .kneeRaise, muscles: [.abs], level: 2, equipment: .bodyweight, step: 0, startWeight: 0, alternative: .deadBug),
+        Exercise(id: .plateChestPress, muscles: [.chest, .triceps], level: 1, equipment: .plateLoaded, step: 5, startWeight: 10, alternative: .chestPress),
+        Exercise(id: .dumbbellFly, muscles: [.chest], level: 2, equipment: .dumbbell, step: 1, startWeight: 4, alternative: .pecDeck),
+        Exercise(id: .machinePullover, muscles: [.lats, .chest], level: 1, equipment: .machine, step: 5, startWeight: 10, alternative: .dumbbellPullover),
+        Exercise(id: .dumbbellPullover, muscles: [.lats, .chest], level: 2, equipment: .dumbbell, step: 2, startWeight: 6, alternative: .machinePullover),
+        Exercise(id: .uprightRow, muscles: [.shoulders, .upperBack], level: 3, equipment: .barbell, step: 2.5, startWeight: 10, alternative: .lateralRaise),
+        Exercise(id: .tricepsMachine, muscles: [.triceps], level: 1, equipment: .machine, step: 5, startWeight: 10, alternative: .tricepsPushdown),
+        Exercise(id: .seatedLegCurl, muscles: [.hamstrings], level: 1, equipment: .machine, step: 5, startWeight: 10, alternative: .legCurl),
+        Exercise(id: .standingLegCurl, muscles: [.hamstrings], level: 1, equipment: .machine, step: 2.5, startWeight: 5, alternative: .seatedLegCurl),
+        Exercise(id: .singleLegPress, muscles: [.quads, .glutes], level: 1, equipment: .plateLoaded, step: 10, startWeight: 0, alternative: .splitSquat),
+        Exercise(id: .seatedCalfRaise, muscles: [.calves], level: 1, equipment: .plateLoaded, step: 5, startWeight: 10, alternative: .calfRaise),
     ].map { ($0.id, $0) })
 }

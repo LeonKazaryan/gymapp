@@ -12,6 +12,8 @@ struct Demo: Sendable {
     var tempo: Tempo
     var props: [Prop]
     var muscles: [Muscle]
+    /// Off for scenes seen from above, where a floor line makes no sense.
+    var showsFloor = true
 
     init(camera: Camera = .side, tempo: Tempo, muscles: [Muscle], start: Pose, end: Pose, alternate: Pose? = nil, props: [Prop]) {
         self.camera = camera
